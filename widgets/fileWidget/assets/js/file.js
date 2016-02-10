@@ -33,6 +33,7 @@ var rwFileInput = {
             fileWrap.find('.file-caption-name').text(jQuery(files[0]).data('title'));
         } else {
             fileInfo.empty().hide();
+            fileWrap.find('.fileinput-remove').hide();
             fileWrap.find('.file-caption-name').empty();
         }
     },
