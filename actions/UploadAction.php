@@ -71,7 +71,10 @@ class UploadAction extends Action
                 }
 
                 if ($model->file->saveAs($this->path . $model->file->name)) {
-                    $result = ['name' => $model->file->name];
+                    $result = [
+                        'originalName' => $_FILES["files"]['name'][0],
+                        'name' => $model->file->name
+                    ];
                 } else {
                     $result = ['error' => 'ERROR_CAN_NOT_UPLOAD_FILE'];
                 }

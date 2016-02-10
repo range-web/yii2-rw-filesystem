@@ -7,8 +7,13 @@ class FileWidget extends Widget
 {
     public $model;
     public $attribute;
-    public $htmlOptions = [];
+    public $htmlOptions = [
+        'btn-upload-icon' => 'glyphicon glyphicon-folder-open',
+        'btn-remove-icon' => 'glyphicon glyphicon-trash'
+    ];
     public $url = '/filesystem/default/upload';
+    public $removeUrl = '/filesystem/default/delete';
+
     public $mimeTypes = '';
     public $multiple = false;
 
@@ -18,6 +23,7 @@ class FileWidget extends Widget
 
         $this->htmlOptions['id'] = ucfirst($classArray['classname']).ucfirst($this->attribute);
 
+        $this->registerAssetBundle();
         $this->registerClientScript();
 
         return $this->render('index', [
@@ -26,35 +32,41 @@ class FileWidget extends Widget
     }
 
 
+    public function registerAssetBundle()
+    {
+        $view = $this->getView();
+        FileAsset::register($view);
+    }
 
     public function registerClientScript()
     {
         $view = $this->getView();
 
         $view->registerJs(
-            "$('#{$this->htmlOptions['id']}').fileupload({
-                    url: $(this).data('url'),
+            "jQuery('#{$this->htmlOptions['id']}').fileupload({
+                    url: jQuery(this).data('url'),
                     dataType: 'json',
-                    /* progressall: function (e, data) {
+                     progressall: function (e, data) {
                         var progress = parseInt(data.loaded / data.total * 100, 10);
-                        $('#progress .progress-bar').css(
+                        /*$('#progress .progress-bar').css(
                             'width',
                             progress + '%'
                         );
-                        $('#progress').attr('data-percent', progress + '%');
-                    },*/
+                        $('#progress').attr('data-percent', progress + '%');*/
+                    },
+                    stop: function(e) {
+                        rwFileInput.uploadDone(e.target);
+                    },
                     fail: function (e, data) {}
 
                 }).prop('disabled', !$.support.fileInput)
                     .parent().addClass($.support.fileInput ? undefined : 'disabled');
 
-                $('#{$this->htmlOptions['id']}').on('fileuploadstop', function (e) {
+                jQuery('#{$this->htmlOptions['id']}').on('fileuploadstop', function (e) {
                    /* $('#progress').attr('data-percent', 'Все файлы успешно загружены!');*/
                 })
                 .on('fileuploaddone', function (e, data) {
-                     if (data.result.id > 0) {
-                     formStepOne.append('<input type=\"hidden\" name=\"'+e.target.dataset.fieldname+'\" value=\"'+data.result.id+'\">')
-                     }
+                    rwFileInput.addFileInfo(e.target, data.result);
                 });"
         );
 

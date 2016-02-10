@@ -1,15 +1,24 @@
+<div class="rw-file-input">
+    <div class="info-upload-files">
 
-<div class="row">
-    <div class="col-lg-1" style="width:12%;height: 38px">
-    <span class="btn btn-success btn-xs fileinput-button">
-        <i class="glyphicon glyphicon-plus"></i>
-        <span>Выбрать файлы</span>
-        <input id="<?=$this->context->htmlOptions['id']?>" data-fieldName="<?= $classArray['classname']?>[<?= $this->context->attribute?>][]" data-url="<?= \yii\helpers\Url::to([$this->context->url]) ?>" accept="<?= $this->context->mimeTypes?>" type="file" name="files[]" <?=($this->context->multiple)?'multiple':''?>>
-    </span>
     </div>
-    <div class="col-lg-11" style="width:88%;padding-top: 4px">
-        <!--div id="progress" class="progress progress-striped" data-percent="0%" style="display: none">
-            <div class="progress-bar progress-bar-success"></div>
-        </div-->
+    <div class="input-group">
+        <div tabindex="500" class="form-control file-caption  kv-fileinput-caption">
+            <div class="file-caption-name"></div>
+        </div>
+        <div class="input-group-btn">
+            <button type="button" tabindex="500" title="Clear selected files" data-remove-url="<?= \yii\helpers\Url::to([$this->context->removeUrl]) ?>" class="btn btn-default fileinput-remove fileinput-remove-button" style="display:none">
+                <i class="<?=$this->context->htmlOptions['btn-remove-icon']?>"></i>
+            </button>
+            <div tabindex="500" class="btn btn-primary btn-file">
+                <i class="<?=$this->context->htmlOptions['btn-upload-icon']?>"></i>
+                <span class="hidden-xs">Выбрать …</span>
+                <input id="<?=$this->context->htmlOptions['id']?>" data-fieldName="<?= $classArray['classname']?>[<?= $this->context->attribute?>][]" data-url="<?= \yii\helpers\Url::to([$this->context->url]) ?>" accept="<?= $this->context->mimeTypes?>" type="file" name="files[]" <?=($this->context->multiple)?'multiple':''?>>
+            </div>
+        </div>
     </div>
 </div>
+
+
+
+    

@@ -1,0 +1,22 @@
+.rw-file-input .info-upload-files {
+    display: none;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    width: 100%;
+    margin-bottom: 5px;
+    text-align: right;
+}
+.rw-file-input .info-upload-files .file-item {
+    padding: 3px;
+}
+.rw-file-input .info-upload-files .file-item .remove-file {
+    background-color: red;
+    color: #fff;
+    padding: 0 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.rw-file-input .btn-file input[type=file] {
+    width: 100%;
+}
