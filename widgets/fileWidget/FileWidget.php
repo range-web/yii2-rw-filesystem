@@ -1,6 +1,7 @@
 <?php
 namespace rangeweb\filesystem\widgets\fileWidget;
 
+use rangeweb\filesystem\models\File;
 use yii\base\Widget;
 
 class FileWidget extends Widget

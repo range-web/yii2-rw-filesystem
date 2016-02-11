@@ -11,7 +11,7 @@ use \yii\web\Response;
 use yii\web\UploadedFile;
 use yii\base\Action;
 use yii\helpers\FileHelper;
-use rangeweb\filesystem\models\Files;
+use rangeweb\filesystem\models\File;
 
 /**
  * UploadAction for images and files.
@@ -80,7 +80,7 @@ class UploadAction extends Action
                 }
             }
 
-            $fileModel = new Files();
+            $fileModel = new File();
 
             $fileModel->file_name = $file->name;
             $fileModel->original_name = $_FILES["files"]['name'][0];

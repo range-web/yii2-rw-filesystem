@@ -2,7 +2,7 @@
 namespace rangeweb\filesystem\controllers;
 use Yii;
 use yii\web\Controller;
-use rangeweb\filesystem\models\Files;
+use rangeweb\filesystem\models\File;
 use yii\web\Response;
 
 class DefaultController extends Controller
@@ -22,13 +22,13 @@ class DefaultController extends Controller
         if (Yii::$app->request->isPost && isset($_POST['id'])) {
             if (is_array($_POST['id'])) {
                 foreach ($_POST['id'] as $id) {
-                    Files::find()
+                    File::find()
                         ->where('id = :id AND tmp = 1', ['id'=>$id])
                         ->one()
                         ->delete();
                 }
             } else {
-                Files::find()
+                File::find()
                     ->where('id = :id AND tmp = 1', ['id'=>$_POST['id']])
                     ->one()
                     ->delete();
