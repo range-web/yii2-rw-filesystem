@@ -46,13 +46,8 @@ class FileWidget extends Widget
             "jQuery('#{$this->htmlOptions['id']}').fileupload({
                     url: jQuery(this).data('url'),
                     dataType: 'json',
-                     progressall: function (e, data) {
-                        var progress = parseInt(data.loaded / data.total * 100, 10);
-                        /*$('#progress .progress-bar').css(
-                            'width',
-                            progress + '%'
-                        );
-                        $('#progress').attr('data-percent', progress + '%');*/
+                    progressall: function (e, data) {
+                        rwFileInput.progress(e.target, data);
                     },
                     stop: function(e) {
                         rwFileInput.uploadDone(e.target);
@@ -63,7 +58,7 @@ class FileWidget extends Widget
                     .parent().addClass($.support.fileInput ? undefined : 'disabled');
 
                 jQuery('#{$this->htmlOptions['id']}').on('fileuploadstop', function (e) {
-                   /* $('#progress').attr('data-percent', 'Все файлы успешно загружены!');*/
+                    //$('.progress').attr('data-percent', 'Все файлы успешно загружены!');
                 })
                 .on('fileuploaddone', function (e, data) {
                     rwFileInput.addFileInfo(e.target, data.result);

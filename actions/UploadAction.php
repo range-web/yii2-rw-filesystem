@@ -20,13 +20,13 @@ use rangeweb\filesystem\models\Files;
  * ```php
  * public function actions()
  * {
- *     return [
- *         'upload' => [
- *             'class' => 'vova07\fileapi\actions\UploadAction',
- *             'path' => '@path/to/files',
- *         ]
- *     ];
+ *      return [
+ *          'upload' => [
+ *              'class' => 'rangeweb\filesystem\actions\UploadAction',
+*          ]
+ *      ];
  * }
+ *
  * ```
  */
 class UploadAction extends Action

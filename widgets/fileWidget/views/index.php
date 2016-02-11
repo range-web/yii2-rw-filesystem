@@ -1,10 +1,13 @@
 <div class="rw-file-input">
-    <div class="info-upload-files">
-
-    </div>
+    <div class="info-upload-files"></div>
     <div class="input-group">
         <div tabindex="500" class="form-control file-caption  kv-fileinput-caption">
             <div class="file-caption-name"></div>
+            <div class="progress" style="display: none">
+                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0" style="width: 0%">
+                    <span class="sr-only"></span>
+                </div>
+            </div>
         </div>
         <div class="input-group-btn">
             <button type="button" tabindex="500" title="Clear selected files" data-remove-url="<?= \yii\helpers\Url::to([$this->context->removeUrl]) ?>" class="btn btn-default fileinput-remove fileinput-remove-button" style="display:none">
