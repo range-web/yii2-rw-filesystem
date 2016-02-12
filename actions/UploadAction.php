@@ -74,6 +74,12 @@ class UploadAction extends Action
                     $model->file->name = uniqid() . '.' . $model->file->extension;
                 }
 
+                $path = FileHelper::normalizePath(Yii::getAlias('@webroot/'.$this->path));
+
+                if (!file_exists($path)) {
+                    FileHelper::createDirectory($path);
+                }
+
                 if ($model->file->saveAs($this->path . $model->file->name)) {
                     $result = [
                         'originalName' => $_FILES["files"]['name'][0],

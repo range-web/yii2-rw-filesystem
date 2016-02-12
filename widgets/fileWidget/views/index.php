@@ -1,8 +1,9 @@
 <div class="rw-file-input <?=($this->context->required)?'required':''?>">
-    <div class="info-upload-files"></div>
+    <div class="info-upload-files">
+    </div>
     <div class="input-group">
         <div tabindex="500" class="pseudo-input file-caption  kv-fileinput-caption">
-            <div class="file-caption-name"></div>
+            <div class="file-caption-name"  data-placeholder="<?=($this->context->placeholder)?$this->context->placeholder:''?>"><?=($this->context->placeholder)?$this->context->placeholder:''?></div>
             <div class="progress" style="display: none">
                 <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0" style="width: 0%">
                     <span class="sr-only"></span>
