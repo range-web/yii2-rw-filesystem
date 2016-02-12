@@ -27,10 +27,11 @@ class FileWidget extends Widget
             $classArray = $this->parseClassName($this->model);
             $this->htmlOptions['id'] = ucfirst($classArray['classname']).ucfirst($this->attribute);
         } else {
+            $this->attribute = 'file';
             $classArray = [
                 'classname' => 'File',
             ];
-            $this->htmlOptions['id'] = uniqid();
+            $this->htmlOptions['id'] = 'File'.uniqid();
         }
 
         $this->registerAssetBundle();

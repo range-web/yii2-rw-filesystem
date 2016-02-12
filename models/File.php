@@ -5,6 +5,7 @@ namespace rangeweb\filesystem\models;
 use rangeweb\filesystem\Module;
 use vova07\imperavi\helpers\FileHelper;
 use Yii;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "tbl_files".
@@ -140,7 +141,7 @@ class File extends \yii\db\ActiveRecord
                 }
             }
 
-            $cachedImage['url'] = \yii\helpers\Url::to([Module::$cacheImagesPath]).'/'.$id.'/' .$arSize[0].'x'.$arSize[1].'/'.$image['file_name'];
+            $cachedImage['url'] = Module::$cacheImagesPath.$id.'/' .$arSize[0].'x'.$arSize[1].'/'.$image['file_name'];
 
             Yii::$app->cache->set('CachedImage_'.$arSize[0].'x'.$arSize[1].'_'.$id, $cachedImage);
         }
@@ -148,5 +149,17 @@ class File extends \yii\db\ActiveRecord
         $res = array_merge($res, $cachedImage);
 
         return $res;
+    }
+
+    public static function img($id, $arSize, $imageQuality=80, $options = [])
+    {
+        $image = self::getResizeImage($id, $arSize, $imageQuality);
+
+        if (!$image)
+            return '';
+
+        $options['alt'] = $image['alt'];
+
+        return Html::img($image['url'], $options);
     }
 }
