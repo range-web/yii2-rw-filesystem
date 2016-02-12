@@ -21,6 +21,8 @@ class FileWidget extends Widget
 
     public $jsCallbackFunctionDone = '';
 
+    public $jsCallbackFunctionDone = '';
+
     public function run()
     {
         if ($this->model != null && $this->attribute != null) {
