@@ -162,4 +162,5 @@ class File extends \yii\db\ActiveRecord
 
         return Html::img($image['url'], $options);
     }
+
 }
