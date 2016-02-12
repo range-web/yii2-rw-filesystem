@@ -11,7 +11,7 @@ use \yii\web\Response;
 use yii\web\UploadedFile;
 use yii\base\Action;
 use yii\helpers\FileHelper;
-use rangeweb\filesystem\models\Files;
+use rangeweb\filesystem\models\File;
 
 /**
  * UploadAction for images and files.
@@ -20,33 +20,36 @@ use rangeweb\filesystem\models\Files;
  * ```php
  * public function actions()
  * {
- *     return [
- *         'upload' => [
- *             'class' => 'vova07\fileapi\actions\UploadAction',
- *             'path' => '@path/to/files',
- *         ]
- *     ];
+ *      return [
+ *          'upload' => [
+ *              'class' => 'rangeweb\filesystem\actions\UploadAction',
+*          ]
+ *      ];
  * }
+ *
  * ```
  */
 class UploadAction extends Action
 {
     private $_validator = 'image';
     public $validatorOptions = [];
-    public $path = 'uploads/';
+    public $uploadOnlyImage = false;
+    public $path;
 
     public function init()
     {
         if ($this->path === null) {
-            throw new InvalidConfigException('The "path" attribute must be set.');
+            $this->path = 'uploads/';
         } else {
-            $this->path = FileHelper::normalizePath(Yii::getAlias($this->path)) . DIRECTORY_SEPARATOR;
+            $this->path = FileHelper::normalizePath(Yii::getAlias('uploads/'.$this->path)) . DIRECTORY_SEPARATOR;
 
             if (!FileHelper::createDirectory($this->path)) {
                 throw new InvalidCallException("Directory specified in 'path' attribute doesn't exist or cannot be created.");
             }
         }
-
+        if ($this->uploadOnlyImage !== true) {
+            $this->_validator = 'file';
+        }
     }
 
     /**
@@ -59,6 +62,7 @@ class UploadAction extends Action
             $file = UploadedFile::getInstanceByName('files[0]');
 
             $model = new DynamicModel(compact('file'));
+
             $model->addRule('file', $this->_validator, $this->validatorOptions)->validate();
 
             if ($model->hasErrors()) {
@@ -71,13 +75,16 @@ class UploadAction extends Action
                 }
 
                 if ($model->file->saveAs($this->path . $model->file->name)) {
-                    $result = ['name' => $model->file->name];
+                    $result = [
+                        'originalName' => $_FILES["files"]['name'][0],
+                        'name' => $model->file->name
+                    ];
                 } else {
                     $result = ['error' => 'ERROR_CAN_NOT_UPLOAD_FILE'];
                 }
             }
 
-            $fileModel = new Files();
+            $fileModel = new File();
 
             $fileModel->file_name = $file->name;
             $fileModel->original_name = $_FILES["files"]['name'][0];
