@@ -4,6 +4,7 @@ var rwFileInput = {
             .on('click', '.fileinput-remove', this.removeFiles)
             .on('click', '.remove-file', this.removeFile)
     },
+    callBackAfterDelete: function() {},
     addFileInfo: function(e, data) {
         var el = $(e),
             parentElement = el.parents('.rw-file-input'),
@@ -53,7 +54,15 @@ var rwFileInput = {
         } else {
             fileInfo.empty().hide();
             fileWrap.find('.fileinput-remove').hide();
-            fileWrap.find('.file-caption-name').empty();
+
+            var captionName = fileWrap.find('.file-caption-name');
+            if (captionName.data('placeholder').length > 0) {
+                captionName.text(captionName.data('placeholder'));
+            } else {
+                captionName.empty();
+            }
+
+            rwFileInput.callBackAfterDelete();
         }
     },
     removeFile: function() {
@@ -99,7 +108,15 @@ var rwFileInput = {
                     files.remove();
                     fileInfo.empty().hide();
                     btn.hide();
-                    parentElement.find('.file-caption-name').empty();
+
+                    var captionName = parentElement.find('.file-caption-name');
+                    if (captionName.data('placeholder').length > 0) {
+                        captionName.text(captionName.data('placeholder'));
+                    } else {
+                        captionName.empty();
+                    }
+
+                    rwFileInput.callBackAfterDelete();
                 }
             }
         });

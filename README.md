@@ -11,7 +11,7 @@ php composer.phar require --prefer-dist rangeweb/yii2-filesystem "*"
 or add
 
 ```
-"rangeweb/yii2-filemanager": "*"
+"rangeweb/yii2-filesystem": "*"
 ```
 
 to the require section of your `composer.json` file.
@@ -25,8 +25,8 @@ Configuration:
 
 ```php
 'modules' => [
-    'filemanager' => [
-        'class' => 'rangeweb\filemanager\Module',
+    'filesystem' => [
+        'class' => 'rangeweb\filesystem\Module',
     ],
 ],
 ```

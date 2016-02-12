@@ -10,8 +10,10 @@ class FileWidget extends Widget
     public $attribute;
     public $htmlOptions = [
         'btn-upload-icon' => 'glyphicon glyphicon-folder-open',
-        'btn-remove-icon' => 'glyphicon glyphicon-trash'
+        'btn-remove-icon' => 'glyphicon glyphicon-trash',
     ];
+
+    public $placeholder = false;
     public $url = '/filesystem/default/upload';
     public $removeUrl = '/filesystem/default/delete';
 
@@ -20,6 +22,7 @@ class FileWidget extends Widget
     public $required = false;
 
     public $jsCallbackFunctionDone = '';
+    public $jsCallbackFunctionAfterDelete = '';
 
     public function run()
     {
@@ -54,8 +57,11 @@ class FileWidget extends Widget
     {
         $view = $this->getView();
 
+        $jsCallbackFunctionAfterDelete = 'function() {'.$this->jsCallbackFunctionAfterDelete.'}';
+
         $view->registerJs(
-            "jQuery('#{$this->htmlOptions['id']}').fileupload({
+            "rwFileInput.callBackAfterDelete = {$jsCallbackFunctionAfterDelete};
+            jQuery('#{$this->htmlOptions['id']}').fileupload({
                     url: jQuery(this).data('url'),
                     dataType: 'json',
                     progressall: function (e, data) {
