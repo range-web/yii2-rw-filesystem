@@ -18,11 +18,19 @@ class FileWidget extends Widget
     public $mimeTypes = '';
     public $multiple = false;
 
+    public $jsCallbackFunctionDone = '';
+
     public function run()
     {
-        $classArray = $this->parseClassName($this->model);
-
-        $this->htmlOptions['id'] = ucfirst($classArray['classname']).ucfirst($this->attribute);
+        if ($this->model != null && $this->attribute != null) {
+            $classArray = $this->parseClassName($this->model);
+            $this->htmlOptions['id'] = ucfirst($classArray['classname']).ucfirst($this->attribute);
+        } else {
+            $classArray = [
+                'classname' => 'File',
+            ];
+            $this->htmlOptions['id'] = uniqid();
+        }
 
         $this->registerAssetBundle();
         $this->registerClientScript();
@@ -31,7 +39,6 @@ class FileWidget extends Widget
             'classArray' => $classArray
         ]);
     }
-
 
     public function registerAssetBundle()
     {
@@ -52,6 +59,7 @@ class FileWidget extends Widget
                     },
                     stop: function(e) {
                         rwFileInput.uploadDone(e.target);
+                        {$this->jsCallbackFunctionDone}
                     },
                     fail: function (e, data) {}
 
@@ -71,9 +79,9 @@ class FileWidget extends Widget
     function parseClassName($model)
     {
         $className = get_class($model);
-        return array(
+        return [
             'namespace' => array_slice(explode('\\', $className), 0, -1),
             'classname' => join('', array_slice(explode('\\', $className), -1)),
-        );
+        ];
     }
 }

@@ -33,6 +33,7 @@ class UploadAction extends Action
 {
     private $_validator = 'image';
     public $validatorOptions = [];
+    public $uploadOnlyImage = false;
     public $path = 'uploads/';
 
     public function init()
@@ -46,7 +47,9 @@ class UploadAction extends Action
                 throw new InvalidCallException("Directory specified in 'path' attribute doesn't exist or cannot be created.");
             }
         }
-
+        if ($this->uploadOnlyImage !== true) {
+            $this->_validator = 'file';
+        }
     }
 
     /**
@@ -59,6 +62,7 @@ class UploadAction extends Action
             $file = UploadedFile::getInstanceByName('files[0]');
 
             $model = new DynamicModel(compact('file'));
+
             $model->addRule('file', $this->_validator, $this->validatorOptions)->validate();
 
             if ($model->hasErrors()) {
