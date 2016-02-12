@@ -99,19 +99,10 @@ class File extends \yii\db\ActiveRecord
 
         $res = [];
 
-        $image = Yii::$app->cache->get('Filesystem'.$id);
+        $image = self::getFile($id);
 
-        if (!$image) {
-            $image = self::find()
-                ->where('id=:id', ['id'=>$id])
-                ->asArray()
-                ->one();
-
-            if (!$image)
-                return false;
-
-            Yii::$app->cache->set('Filesystem'.$id, $image);
-        }
+        if (!$image)
+            return false;
 
         $res['name'] = $image['name'];
         $res['alt'] = $image['alt'];
@@ -161,5 +152,24 @@ class File extends \yii\db\ActiveRecord
         $options['alt'] = $image['alt'];
 
         return Html::img($image['url'], $options);
+    }
+
+    public static function getFile($id)
+    {
+        $file = Yii::$app->cache->get('Filesystem'.$id);
+
+        if (!$file) {
+            $file = self::find()
+                ->where('id=:id', ['id'=>$id])
+                ->asArray()
+                ->one();
+
+            if (!$file)
+                return false;
+
+            Yii::$app->cache->set('Filesystem'.$id, $file);
+        }
+
+        return $file;
     }
 }
