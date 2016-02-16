@@ -60,13 +60,15 @@ class FileWidget extends Widget
         $jsCallbackFunctionAfterDelete = 'function() {'.$this->jsCallbackFunctionAfterDelete.'}';
 
         $view->registerJs(
-            "rwFileInput.callBackAfterDelete = {$jsCallbackFunctionAfterDelete};
+            "
+            rwFileInput.callBackAfterDelete = {$jsCallbackFunctionAfterDelete};
             jQuery('#{$this->htmlOptions['id']}').fileupload({
                     url: jQuery(this).data('url'),
                     dataType: 'json',
                     progressall: function (e, data) {
                         rwFileInput.progress(e.target, data);
                     },
+
                     stop: function(e) {
                         rwFileInput.uploadDone(e.target);
                         {$this->jsCallbackFunctionDone}

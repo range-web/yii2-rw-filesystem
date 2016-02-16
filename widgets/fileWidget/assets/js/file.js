@@ -11,7 +11,7 @@ var rwFileInput = {
             requiredClass = '';
 
         if (data.id > 0) {
-            parentElement.append('<input class="'+el.attr('id')+' form-control" type="hidden" data-file="'+data.id+'" data-title="'+data.originalName+'" name="'+el.data('fieldname')+'" value="'+data.id+'">');
+            parentElement.append('<input class="'+el.attr('id')+' form-control new-file" type="hidden" data-file="'+data.id+'" data-title="'+data.originalName+'" name="'+el.data('fieldname')+'" value="'+data.id+'">');
         }
     },
     uploadDone: function(e) {
@@ -71,6 +71,7 @@ var rwFileInput = {
             fileId = parent.data('file-id'),
             parentElement = btn.parents('.rw-file-input');
 
+
             $.ajax({
                 url: parentElement.find('.fileinput-remove').data('remove-url'),
                 type: 'post',
@@ -86,8 +87,8 @@ var rwFileInput = {
             });
     },
     removeFiles: function() {
-        var btn = $(this),
-            parentElement = btn.parents('.rw-file-input'),
+            var btn = $(this),
+                parentElement = btn.parents('.rw-file-input'),
             fileInfo = parentElement.find('.info-upload-files'),
             inputClass = parentElement.find('.btn-file').find('input').attr('id'),
             files = parentElement.find('.'+inputClass),
