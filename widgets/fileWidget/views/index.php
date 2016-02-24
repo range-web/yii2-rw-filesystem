@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="input-group-btn">
-            <button type="button" tabindex="500" title="Clear selected files" data-remove-url="<?= \yii\helpers\Url::to([$this->context->removeUrl]) ?>" class="btn btn-default fileinput-remove fileinput-remove-button" style="display:none">
+            <button type="button" tabindex="500" title="Clear selected files" data-remove-url="<?= \yii\helpers\Url::to([$this->context->removeUrl]) ?>" class="btn btn-default fileinput-remove fileinput-remove-button" <?=(!empty($this->context->file)) ? '':'style="display:none"'?>>
                 <i class="<?=$this->context->htmlOptions['btn-remove-icon']?>"></i>
             </button>
             <div tabindex="500" class="btn btn-primary btn-file">
@@ -21,6 +21,9 @@
             </div>
         </div>
     </div>
+    <?php if (!empty($this->context->file)) : ?>
+        <input class="<?=$this->context->htmlOptions['id']?> form-control new-file" type="hidden" data-file="<?=$this->context->file['id']?>" data-title="<?=$this->context->file['original_name']?>" name="<?= $classArray['classname']?>[<?= $this->context->attribute?>][]" value="<?=$this->context->file['id']?>">
+    <?php endif; ?>
 </div>
 
 

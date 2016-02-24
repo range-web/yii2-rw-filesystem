@@ -13,6 +13,8 @@ class FileWidget extends Widget
         'btn-remove-icon' => 'glyphicon glyphicon-trash',
     ];
 
+    public $file = [];
+
     public $placeholder = false;
     public $url = '/filesystem/default/upload';
     public $removeUrl = '/filesystem/default/delete';
@@ -27,6 +29,13 @@ class FileWidget extends Widget
     public function run()
     {
         if ($this->model != null && $this->attribute != null) {
+
+            if ($this->model->{$this->attribute} > 0) {
+                // делаем запрос на информацию о файле
+                $this->file = File::getFile($this->model->{$this->attribute});
+                $this->placeholder = $this->file['original_name'];
+            }
+
             $classArray = $this->parseClassName($this->model);
             $this->htmlOptions['id'] = ucfirst($classArray['classname']).ucfirst($this->attribute);
         } else {
