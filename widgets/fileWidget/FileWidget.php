@@ -29,11 +29,15 @@ class FileWidget extends Widget
     public function run()
     {
         if ($this->model != null && $this->attribute != null) {
-
-            if ($this->model->{$this->attribute} > 0) {
+            if (count($this->model->{$this->attribute})>1) {
+                foreach($this->model->{$this->attribute} as $id=>$file_id) {
+                    $this->file[] = File::getFile($file_id);
+                }
+                $this->placeholder = count($this->model->{$this->attribute}) . ' файла';
+            } elseif ($this->model->{$this->attribute}>0) {
                 // делаем запрос на информацию о файле
-                $this->file = File::getFile($this->model->{$this->attribute});
-                $this->placeholder = $this->file['original_name'];
+                $this->file[] = File::getFile($this->model->{$this->attribute});
+                $this->placeholder = $this->file[0]['original_name'];
             }
 
             $classArray = $this->parseClassName($this->model);

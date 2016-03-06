@@ -20,16 +20,18 @@ class DefaultController extends Controller
     {
         $result = ['status'=>false];
         if (Yii::$app->request->isPost && isset($_POST['id'])) {
+
             if (is_array($_POST['id'])) {
                 foreach ($_POST['id'] as $id) {
                     File::find()
-                        ->where('id = :id AND tmp = 1', ['id'=>$id])
+                        ->where('id = :id', ['id'=>$id])
                         ->one()
                         ->delete();
                 }
             } else {
+
                 File::find()
-                    ->where('id = :id AND tmp = 1', ['id'=>$_POST['id']])
+                    ->where('id = :id', ['id'=>$_POST['id']])
                     ->one()
                     ->delete();
             }

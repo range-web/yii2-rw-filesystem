@@ -169,7 +169,6 @@ class File extends \yii\db\ActiveRecord
 
             Yii::$app->cache->set('Filesystem'.$id, $file);
         }
-
         return $file;
     }
 }

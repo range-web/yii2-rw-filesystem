@@ -1,5 +1,10 @@
 <div class="rw-file-input <?=($this->context->required)?'required':''?>">
-    <div class="info-upload-files">
+    <div class="info-upload-files" data-field-delete-name="<?= $classArray['classname']?>[<?= $this->context->attribute?>_delete][]" <?=(count($this->context->file) > 1)?'style="display: block"':''?>  >
+        <?php if (count($this->context->file) > 1) : ?>
+            <?php foreach ($this->context->file as $file) : ?>
+                <div class="file-item"  data-file-id="<?=$file['id']?>"><?=$file['original_name']?><span class="remove-file">×</span></div>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
     <div class="input-group">
         <div tabindex="500" class="pseudo-input file-caption  kv-fileinput-caption">
@@ -22,7 +27,9 @@
         </div>
     </div>
     <?php if (!empty($this->context->file)) : ?>
-        <input class="<?=$this->context->htmlOptions['id']?> form-control new-file" type="hidden" data-file="<?=$this->context->file['id']?>" data-title="<?=$this->context->file['original_name']?>" name="<?= $classArray['classname']?>[<?= $this->context->attribute?>][]" value="<?=$this->context->file['id']?>">
+       <?php foreach ($this->context->file as $file) : ?>
+            <input class="<?=$this->context->htmlOptions['id']?> form-control update-file" type="hidden" data-file="<?=$file['id']?>" data-title="<?=$file['original_name']?>" name="<?= $classArray['classname']?>[<?= $this->context->attribute?>_update]" value="<?=$file['id']?>">
+       <?php endforeach; ?>
     <?php endif; ?>
 </div>
 

@@ -9,9 +9,8 @@ var rwFileInput = {
         var el = $(e),
             parentElement = el.parents('.rw-file-input'),
             requiredClass = '';
-
         if (data.id > 0) {
-            parentElement.append('<input class="'+el.attr('id')+' form-control new-file" type="hidden" data-file="'+data.id+'" data-title="'+data.originalName+'" name="'+el.data('fieldname')+'" value="'+data.id+'">');
+            parentElement.append('<input class="'+el.attr('id')+' form-control create-file" type="hidden" data-file="'+data.id+'" data-title="'+data.originalName+'" name="'+el.data('fieldname')+'" value="'+data.id+'">');
         }
     },
     uploadDone: function(e) {
@@ -48,6 +47,7 @@ var rwFileInput = {
                 var file = $(element);
                 fileInfo.append('<div class="file-item" data-file-id="'+file.val()+'">'+file.data('title')+'<span class="remove-file">&times;</span></div>')
             });
+
         } else if (files.length == 1) {
             fileInfo.empty().hide();
             fileWrap.find('.file-caption-name').text(jQuery(files[0]).data('title'));
@@ -69,21 +69,24 @@ var rwFileInput = {
         var btn = $(this),
             parent = btn.parent(),
             fileId = parent.data('file-id'),
-            parentElement = btn.parents('.rw-file-input');
-
-
+            fieldDeleteName = parent.parent().data('field-delete-name'),
+            parentElement = btn.parents('.rw-file-input'),
+            issetUpdateField = $('.update-file[data-file='+fileId+']').length;
+            if (issetUpdateField) {
+                parentElement.append('<input class="form-control delete-file" type="hidden" name="'+fieldDeleteName+'" value="'+fileId+'">');
+            }
             $.ajax({
-                url: parentElement.find('.fileinput-remove').data('remove-url'),
-                type: 'post',
-                dataType: 'json',
-                data: {id:fileId},
-                success: function(data) {
-                    if (data.status) {
-                        parent.remove();
-                        parentElement.find('input[data-file='+fileId+']').remove();
-                        rwFileInput.getInfoFiles(parentElement);
-                    }
+            url: parentElement.find('.fileinput-remove').data('remove-url'),
+            type: 'post',
+            dataType: 'json',
+            data: {id:fileId},
+            success: function(data) {
+                if (data.status) {
+                    parent.remove();
+                    parentElement.find('input[data-file='+fileId+']').remove();
+                    rwFileInput.getInfoFiles(parentElement);
                 }
+            }
             });
     },
     removeFiles: function() {
@@ -92,11 +95,16 @@ var rwFileInput = {
             fileInfo = parentElement.find('.info-upload-files'),
             inputClass = parentElement.find('.btn-file').find('input').attr('id'),
             files = parentElement.find('.'+inputClass),
-            ids = [];
+            ids = [],
+            fieldDeleteName = $('.info-upload-files').data('field-delete-name');
 
         files.each(function(i, element) {
             var file = $(element);
             ids.push(file.val());
+            issetUpdateField = $('.update-file[data-file='+file.val()+']').length;
+            if (issetUpdateField) {
+                parentElement.append('<input class="form-control delete-file" type="hidden" name="'+fieldDeleteName+'" value="'+file.val()+'">');
+            }
         });
 
         $.ajax({
@@ -109,13 +117,13 @@ var rwFileInput = {
                     files.remove();
                     fileInfo.empty().hide();
                     btn.hide();
-
                     var captionName = parentElement.find('.file-caption-name');
-                    if (captionName.data('placeholder').length > 0) {
-                        captionName.text(captionName.data('placeholder'));
-                    } else {
-                        captionName.empty();
-                    }
+                    captionName.empty();
+                    //if (captionName.data('placeholder').length > 0) {
+                    //    captionName.text(captionName.data('placeholder'));
+                    //} else {
+                    //    captionName.empty();
+                    //}
 
                     rwFileInput.callBackAfterDelete();
                 }
