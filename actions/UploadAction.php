@@ -35,17 +35,16 @@ class UploadAction extends Action
     public $validatorOptions = [];
     public $uploadOnlyImage = false;
     public $path;
+    public $uploadPath;
 
     public function init()
     {
-        if ($this->path === null) {
-            $this->path = 'uploads/';
-        } else {
-            $this->path = FileHelper::normalizePath(Yii::getAlias('uploads/'.$this->path)) . DIRECTORY_SEPARATOR;
+        $this->path = 'uploads/'. $this->path;
+        $separator = ($this->path) ? DIRECTORY_SEPARATOR : '';
+        $this->uploadPath = FileHelper::normalizePath(Yii::getAlias(Yii::$app->getModule('filesystem')->uploadPath . $this->path)) . $separator;
 
-            if (!FileHelper::createDirectory($this->path)) {
-                throw new InvalidCallException("Directory specified in 'path' attribute doesn't exist or cannot be created.");
-            }
+        if (!FileHelper::createDirectory($this->uploadPath)) {
+            throw new InvalidCallException("Directory specified in 'path' attribute doesn't exist or cannot be created.");
         }
         if ($this->uploadOnlyImage !== true) {
             $this->_validator = 'file';
@@ -74,13 +73,11 @@ class UploadAction extends Action
                     $model->file->name = uniqid() . '.' . $model->file->extension;
                 }
 
-                $path = FileHelper::normalizePath(Yii::getAlias('@webroot/'.$this->path));
-
-                if (!file_exists($path)) {
-                    FileHelper::createDirectory($path);
+                if (!file_exists($this->uploadPath)) {
+                    FileHelper::createDirectory($this->uploadPath);
                 }
 
-                if ($model->file->saveAs($this->path . $model->file->name)) {
+                if ($model->file->saveAs($this->uploadPath . $model->file->name)) {
                     $result = [
                         'originalName' => $_FILES["files"]['name'][0],
                         'name' => $model->file->name

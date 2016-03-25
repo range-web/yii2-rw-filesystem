@@ -24,6 +24,8 @@ class Module extends \yii\base\Module
      */
     private static $defaultThumbSize = [128, 128];
 
+    public $uploadPath = '@frontend/web/';
+
     public function init()
     {
         parent::init();

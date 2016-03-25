@@ -110,14 +110,16 @@ class File extends \yii\db\ActiveRecord
         $cachedImage = Yii::$app->cache->get('CachedImage_'.$arSize[0].'x'.$arSize[1].'_'.$id);
 
         if (!$cachedImage) {
-            $path = FileHelper::normalizePath(Yii::getAlias('@webroot'.Module::$cacheImagesPath)).DIRECTORY_SEPARATOR;
+
+            $path = FileHelper::normalizePath(Yii::getAlias(Yii::$app->getModule('filesystem')->uploadPath.Module::$cacheImagesPath)).DIRECTORY_SEPARATOR;
             $folder = $id.DIRECTORY_SEPARATOR .$arSize[0].'x'.$arSize[1].DIRECTORY_SEPARATOR;
 
             if (!file_exists($path.$folder.$image['file_name'])) {
 
-                $originalFile = FileHelper::normalizePath(Yii::getAlias('@webroot/'.$image['subdir'].'/'.$image['file_name']));
+                $originalFile = FileHelper::normalizePath(Yii::getAlias(Yii::$app->getModule('filesystem')->uploadPath.$image['subdir'].'/'.$image['file_name']));
 
                 if (file_exists($originalFile) && FileHelper::createDirectory($path.$folder)) {
+
                     $imageGD=Yii::$app->image->load($originalFile);
                     $imageGD->resize($arSize[0],$arSize[1]);
 
@@ -154,9 +156,19 @@ class File extends \yii\db\ActiveRecord
         return Html::img($image['url'], $options);
     }
 
+    public static function url($id, $arSize, $imageQuality=80)
+    {
+        $image = self::getResizeImage($id, $arSize, $imageQuality);
+
+        if (!$image)
+            return '';
+
+        return $image['url'];
+    }
+
     public static function getFile($id)
     {
-        $file = Yii::$app->cache->get('Filesystem'.$id);
+       // $file = Yii::$app->cache->get('Filesystem'.$id);
 
         if (!$file) {
             $file = self::find()
@@ -169,6 +181,7 @@ class File extends \yii\db\ActiveRecord
 
             Yii::$app->cache->set('Filesystem'.$id, $file);
         }
+        $file['src'] ='/'.$file['subdir'].'/'.$file['file_name'];
         return $file;
     }
 }

@@ -35,6 +35,7 @@ class FileWidget extends Widget
                 }
                 $this->placeholder = count($this->model->{$this->attribute}) . ' файла';
             } elseif ($this->model->{$this->attribute}>0) {
+
                 // делаем запрос на информацию о файле
                 $this->file[] = File::getFile($this->model->{$this->attribute});
                 $this->placeholder = $this->file[0]['original_name'];
