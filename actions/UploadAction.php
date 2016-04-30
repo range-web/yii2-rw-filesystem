@@ -96,6 +96,8 @@ class UploadAction extends Action
             $fileModel->mime_type = $file->type;
             $fileModel->subdir = $this->path;
 
+            $result['url'] = '/'.$fileModel->subdir.'/'.$fileModel->file_name;
+
             $result['id'] = 0;
             $fileModel->validate();
             if ($fileModel->save()){

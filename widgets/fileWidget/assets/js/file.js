@@ -6,11 +6,12 @@ var rwFileInput = {
     },
     callBackAfterDelete: function() {},
     addFileInfo: function(e, data) {
+
         var el = $(e),
             parentElement = el.parents('.rw-file-input'),
             requiredClass = '';
         if (data.id > 0) {
-            parentElement.append('<input class="'+el.attr('id')+' form-control create-file" type="hidden" data-file="'+data.id+'" data-title="'+data.originalName+'" name="'+el.data('fieldname')+'" value="'+data.id+'">');
+            parentElement.append('<input class="'+el.attr('id')+' uploaded-file form-control create-file" type="hidden" data-url="'+data.url+'" data-file="'+data.id+'" data-title="'+data.originalName+'" name="'+el.data('fieldname')+'" value="'+data.id+'">');
         }
     },
     uploadDone: function(e) {
