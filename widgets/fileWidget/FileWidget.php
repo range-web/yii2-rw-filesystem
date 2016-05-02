@@ -22,6 +22,7 @@ class FileWidget extends Widget
     public $mimeTypes = '';
     public $multiple = false;
     public $deleteOldFile = false;
+    public $hideUploadInfo = false;
     public $required = false;
 
     public $jsCallbackFunctionDone = '';
@@ -75,13 +76,15 @@ class FileWidget extends Widget
         $jsCallbackFunctionAfterDelete = 'function() {'.$this->jsCallbackFunctionAfterDelete.'}';
 
         $deleteOldFile = ($this->deleteOldFile)?'true':'false';
+        $hideUploadInfo = ($this->hideUploadInfo)?'true':'false';
 
         $view->registerJs(
             "
             rwFileInput.callBackAfterDelete = {$jsCallbackFunctionAfterDelete};
             
             var RWfileWidgetParams = {
-                    deleteOldFile: {$deleteOldFile}
+                    deleteOldFile: {$deleteOldFile},
+                    hideUploadInfo: {$hideUploadInfo}
             }
            
             jQuery('#{$this->htmlOptions['id']}').fileupload({
@@ -92,6 +95,7 @@ class FileWidget extends Widget
                     },
 
                     stop: function(e) {
+                        rwFileInput.hideFileInfo = RWfileWidgetParams.hideUploadInfo;
                         rwFileInput.uploadDone(e.target);
                         {$this->jsCallbackFunctionDone}
                     },
@@ -117,6 +121,7 @@ class FileWidget extends Widget
                     }
                 })
                 .on('fileuploaddone', function (e, data) {
+                    rwFileInput.hideFileInfo = RWfileWidgetParams.hideUploadInfo;
                     rwFileInput.addFileInfo(e.target, data.result);
                 });"
         );
