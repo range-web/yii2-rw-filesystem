@@ -68,8 +68,9 @@ class DeleteAction extends Action
             }
             $result['status'] = true;
 
-
-            $this->callback($_POST['id']);
+            if ($this->callback != null) {
+                $this->callback($_POST['id']);
+            }
         }
         
         Yii::$app->response->format = Response::FORMAT_JSON;

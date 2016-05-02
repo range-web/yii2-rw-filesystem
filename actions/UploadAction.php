@@ -105,8 +105,9 @@ class UploadAction extends Action
             if ($fileModel->save()){
                 $result['id'] = $fileModel->id;
             }
-
-            $this->callback($fileModel->id);
+            if ($this->callback != null) {
+                $this->callback($fileModel->id);
+            }
 
             Yii::$app->response->format = Response::FORMAT_JSON;
             return $result;
