@@ -21,6 +21,7 @@ class FileWidget extends Widget
 
     public $mimeTypes = '';
     public $multiple = false;
+    public $deleteOldFile = false;
     public $required = false;
 
     public $jsCallbackFunctionDone = '';
@@ -73,9 +74,16 @@ class FileWidget extends Widget
 
         $jsCallbackFunctionAfterDelete = 'function() {'.$this->jsCallbackFunctionAfterDelete.'}';
 
+        $deleteOldFile = ($this->deleteOldFile)?'true':'false';
+
         $view->registerJs(
             "
             rwFileInput.callBackAfterDelete = {$jsCallbackFunctionAfterDelete};
+            
+            var RWfileWidgetParams = {
+                    deleteOldFile: {$deleteOldFile}
+            }
+           
             jQuery('#{$this->htmlOptions['id']}').fileupload({
                     url: jQuery(this).data('url'),
                     dataType: 'json',
@@ -94,6 +102,19 @@ class FileWidget extends Widget
 
                 jQuery('#{$this->htmlOptions['id']}').on('fileuploadstop', function (e) {
                     //$('.progress').attr('data-percent', 'Все файлы успешно загружены!');
+                })
+                .on('fileuploadstart', function (e, data) {
+                    
+                    if (RWfileWidgetParams.deleteOldFile) {
+                        var uploadedFile = jQuery('.update-file');
+                        
+                        if (uploadedFile.length > 0) {
+                            var fileId = uploadedFile.data('file');
+                            
+                            rwFileInput.removeFileById(fileId);
+                            uploadedFile.remove();
+                        }
+                    }
                 })
                 .on('fileuploaddone', function (e, data) {
                     rwFileInput.addFileInfo(e.target, data.result);

@@ -90,7 +90,21 @@ var rwFileInput = {
             }
             });
     },
+    removeFileById: function(id) {
+        $.ajax({
+            url: $('[data-remove-url]').data('remove-url'),
+            type: 'post',
+            dataType: 'json',
+            data: {id:id},
+            success: function(data) {
+                rwFileInput.callBackAfterDelete();
+            }
+        });
+    },
     removeFiles: function() {
+        
+        if (!confirm('Вы действительно хотите удалить?')) return false;
+
             var btn = $(this),
                 parentElement = btn.parents('.rw-file-input'),
             fileInfo = parentElement.find('.info-upload-files'),

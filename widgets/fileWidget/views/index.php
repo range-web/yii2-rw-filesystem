@@ -1,3 +1,4 @@
+
 <div class="rw-file-input <?=($this->context->required)?'required':''?>">
     <div class="info-upload-files" data-field-delete-name="<?= $classArray['classname']?>[<?= $this->context->attribute?>_delete][]" <?=(count($this->context->file) > 1)?'style="display: block"':''?>  >
         <?php if (count($this->context->file) > 1) : ?>

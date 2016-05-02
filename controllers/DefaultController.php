@@ -12,32 +12,10 @@ class DefaultController extends Controller
       return [
           'upload' => [
               'class' => 'rangeweb\filesystem\actions\UploadAction',
+          ],
+          'delete' => [
+              'class' => 'rangeweb\filesystem\actions\DeleteAction',
           ]
       ];
-    }
-
-    public function actionDelete()
-    {
-        $result = ['status'=>false];
-        if (Yii::$app->request->isPost && isset($_POST['id'])) {
-
-            if (is_array($_POST['id'])) {
-                foreach ($_POST['id'] as $id) {
-                    File::find()
-                        ->where('id = :id', ['id'=>$id])
-                        ->one()
-                        ->delete();
-                }
-            } else {
-
-                File::find()
-                    ->where('id = :id', ['id'=>$_POST['id']])
-                    ->one()
-                    ->delete();
-            }
-            $result['status'] = true;
-        }
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return $result;
     }
 }
