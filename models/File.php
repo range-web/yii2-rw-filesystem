@@ -168,7 +168,7 @@ class File extends \yii\db\ActiveRecord
 
     public static function getFile($id)
     {
-       // $file = Yii::$app->cache->get('Filesystem'.$id);
+        $file = Yii::$app->cache->get('Filesystem'.$id);
 
         if (!$file) {
             $file = self::find()
