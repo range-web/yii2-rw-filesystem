@@ -1,4 +1,5 @@
 var rwFileInput = {
+    hideFileInfo: false,
     init: function() {
         $(document)
             .on('click', '.fileinput-remove', this.removeFiles)
@@ -6,17 +7,20 @@ var rwFileInput = {
     },
     callBackAfterDelete: function() {},
     addFileInfo: function(e, data) {
+
         var el = $(e),
             parentElement = el.parents('.rw-file-input'),
             requiredClass = '';
         if (data.id > 0) {
-            parentElement.append('<input class="'+el.attr('id')+' form-control create-file" type="hidden" data-file="'+data.id+'" data-title="'+data.originalName+'" name="'+el.data('fieldname')+'" value="'+data.id+'">');
+            parentElement.append('<input class="'+el.attr('id')+' uploaded-file form-control create-file" type="hidden" data-url="'+data.url+'" data-file="'+data.id+'" data-title="'+data.originalName+'" name="'+el.data('fieldname')+'" value="'+data.id+'">');
         }
     },
     uploadDone: function(e) {
         var parentElement = $(e).parents('.rw-file-input');
         parentElement.find('.progress').hide();
-        parentElement.find('.file-caption-name').show();
+        if (!rwFileInput.hideFileInfo) {
+            parentElement.find('.file-caption-name').show();
+        }
         this.getInfoFiles(parentElement);
     },
     progress: function(e, data) {
@@ -38,11 +42,16 @@ var rwFileInput = {
             files = fileWrap.find('.'+inputClass),
             fileInfo = fileWrap.find('.info-upload-files'),
             btnRemove = fileWrap.find('.fileinput-remove');
-
-        btnRemove.show();
+            if (!rwFileInput.hideFileInfo) {
+                btnRemove.show();
+            }
         if (files.length > 1) {
             fileWrap.find('.file-caption-name').text(files.length+' '+this.declinationWords(files.length, 'файл', 'файла', 'файлов'));
-            fileInfo.empty().show();
+
+            if (!rwFileInput.hideFileInfo) {
+                fileInfo.empty().show();
+            }
+
             files.each(function(i, element) {
                 var file = $(element);
                 fileInfo.append('<div class="file-item" data-file-id="'+file.val()+'">'+file.data('title')+'<span class="remove-file">&times;</span></div>')
@@ -89,7 +98,21 @@ var rwFileInput = {
             }
             });
     },
+    removeFileById: function(id) {
+        $.ajax({
+            url: $('[data-remove-url]').data('remove-url'),
+            type: 'post',
+            dataType: 'json',
+            data: {id:id},
+            success: function(data) {
+                rwFileInput.callBackAfterDelete();
+            }
+        });
+    },
     removeFiles: function() {
+        
+        if (!confirm('Вы действительно хотите удалить?')) return false;
+
             var btn = $(this),
                 parentElement = btn.parents('.rw-file-input'),
             fileInfo = parentElement.find('.info-upload-files'),

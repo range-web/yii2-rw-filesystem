@@ -19,6 +19,7 @@ class m160120_053954_create_table_files extends Migration
             'size'=>'varchar(100)',
             'mime_type'=>'varchar(100)',
             'tmp'=>'int(1)',
+            'user_id'=>'int(11)',
             'date_create'=>'datetime',
         ]);
     }

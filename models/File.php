@@ -22,6 +22,7 @@ use yii\helpers\Html;
  * @property string $size
  * @property string $mime_type
  * @property integer $tmp
+ * @property integer $user_id
  * @property string $date_create
  */
 class File extends \yii\db\ActiveRecord
@@ -74,7 +75,16 @@ class File extends \yii\db\ActiveRecord
         if ($this->isNewRecord){
             $this->tmp = 1;
             $this->date_create = date('Y-m-d H-i-s');
+            
+            if ($this->user_id == null) {
+                if (!\Yii::$app->user->isGuest) {
+                    $this->user_id = Yii::$app->user->id;
+                }
+            
+            }
         }
+        
+        
 
         return parent::beforeSave($insert);
     }

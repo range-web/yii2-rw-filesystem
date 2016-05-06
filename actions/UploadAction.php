@@ -37,6 +37,8 @@ class UploadAction extends Action
     public $path;
     public $uploadPath;
 
+    public $callback;
+
     public function init()
     {
         $this->path = 'uploads/'. $this->path;
@@ -96,10 +98,15 @@ class UploadAction extends Action
             $fileModel->mime_type = $file->type;
             $fileModel->subdir = $this->path;
 
+            $result['url'] = '/'.$fileModel->subdir.'/'.$fileModel->file_name;
+
             $result['id'] = 0;
             $fileModel->validate();
             if ($fileModel->save()){
                 $result['id'] = $fileModel->id;
+            }
+            if ($this->callback != null) {
+                $this->callback($fileModel->id);
             }
 
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -107,5 +114,20 @@ class UploadAction extends Action
         } else {
             throw new BadRequestHttpException('Only POST is allowed');
         }
+    }
+
+
+    /**
+     * @param $imageId
+     * @return mixed
+     * @throws InvalidConfigException
+     */
+    protected function callback($imageId)
+    {
+        if (!is_callable($this->callback)) {
+            throw new InvalidConfigException('"' . get_class($this) . '::callback" should be a valid callback.');
+        }
+        $response = call_user_func($this->callback, $imageId);
+        return $response;
     }
 }
