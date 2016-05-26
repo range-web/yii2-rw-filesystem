@@ -1,17 +1,28 @@
 var rwFileInput = {
     hideFileInfo: false,
+    fileId: 0,
     init: function() {
         $(document)
             .on('click', '.fileinput-remove', this.removeFiles)
             .on('click', '.remove-file', this.removeFile)
     },
     callBackAfterDelete: function() {},
-    addFileInfo: function(e, data) {
+    cropImage: function() {
+        $('#modal-jcrop').modal('show');
+    },
+    addFileInfo: function(e, data, multiple) {
 
         var el = $(e),
             parentElement = el.parents('.rw-file-input'),
             requiredClass = '';
         if (data.id > 0) {
+
+            rwFileInput.fileId = data.id;
+
+            if (!multiple) {
+                $('.'+el.attr('id')).remove();
+            }
+
             parentElement.append('<input class="'+el.attr('id')+' uploaded-file form-control create-file" type="hidden" data-url="'+data.url+'" data-file="'+data.id+'" data-title="'+data.originalName+'" name="'+el.data('fieldname')+'" value="'+data.id+'">');
         }
     },
@@ -45,6 +56,7 @@ var rwFileInput = {
             if (!rwFileInput.hideFileInfo) {
                 btnRemove.show();
             }
+
         if (files.length > 1) {
             fileWrap.find('.file-caption-name').text(files.length+' '+this.declinationWords(files.length, 'файл', 'файла', 'файлов'));
 

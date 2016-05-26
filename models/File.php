@@ -175,10 +175,20 @@ class File extends \yii\db\ActiveRecord
 
         return $image['url'];
     }
+    
+    public function getUrl($arSize, $imageQuality=80)
+    {
+        return File::getResizeImage($this->id, $arSize, $imageQuality);
+    }
+
+    public function getPath()
+    {
+        return FileHelper::normalizePath(Yii::getAlias(Yii::$app->getModule('filesystem')->uploadPath.$this->subdir.'/'.$this->file_name));
+    }
 
     public static function getFile($id)
     {
-       // $file = Yii::$app->cache->get('Filesystem'.$id);
+        $file = Yii::$app->cache->get('Filesystem'.$id);
 
         if (!$file) {
             $file = self::find()

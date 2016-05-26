@@ -27,6 +27,8 @@ class FileWidget extends Widget
 
     public $jsCallbackFunctionDone = '';
     public $jsCallbackFunctionAfterDelete = '';
+    
+    public $crop = false;
 
     public function run()
     {
@@ -66,7 +68,13 @@ class FileWidget extends Widget
     public function registerAssetBundle()
     {
         $view = $this->getView();
+        
+        if (!$this->multiple && $this->crop) {
+            
+        }
+        
         FileAsset::register($view);
+        
     }
 
     public function registerClientScript()
@@ -77,6 +85,8 @@ class FileWidget extends Widget
 
         $deleteOldFile = ($this->deleteOldFile)?'true':'false';
         $hideUploadInfo = ($this->hideUploadInfo)?'true':'false';
+        $multiple = ($this->multiple)?'true':'false';
+        $crop = (!$this->multiple && $this->crop)?'true':'false';
 
         $view->registerJs(
             "
@@ -84,7 +94,9 @@ class FileWidget extends Widget
             
             var RWfileWidgetParams = {
                     deleteOldFile: {$deleteOldFile},
-                    hideUploadInfo: {$hideUploadInfo}
+                    hideUploadInfo: {$hideUploadInfo},
+                    multiple: {$multiple},
+                    crop: {$crop}
             }
            
             jQuery('#{$this->htmlOptions['id']}').fileupload({
@@ -122,7 +134,7 @@ class FileWidget extends Widget
                 })
                 .on('fileuploaddone', function (e, data) {
                     rwFileInput.hideFileInfo = RWfileWidgetParams.hideUploadInfo;
-                    rwFileInput.addFileInfo(e.target, data.result);
+                    rwFileInput.addFileInfo(e.target, data.result, {$multiple});
                 });"
         );
 
