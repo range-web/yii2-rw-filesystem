@@ -186,6 +186,11 @@ class File extends \yii\db\ActiveRecord
         return FileHelper::normalizePath(Yii::getAlias(Yii::$app->getModule('filesystem')->uploadPath.$this->subdir.'/'.$this->file_name));
     }
 
+    public function getUrlToFile()
+    {
+        return '/' . $this->subdir.'/'.$this->file_name;
+    }
+    
     public static function getFile($id)
     {
         $file = Yii::$app->cache->get('Filesystem'.$id);
