@@ -23,7 +23,7 @@
             <div tabindex="500" class="btn btn-primary btn-file">
                 <i class="<?=$this->context->htmlOptions['btn-upload-icon']?>"></i>
                 <span class="hidden-xs">Выбрать</span>
-                <input id="<?=$this->context->htmlOptions['id']?>" data-fieldName="<?= $classArray['classname']?>[<?= $this->context->attribute?>][]" data-url="<?= \yii\helpers\Url::to([$this->context->url]) ?>" accept="<?= $this->context->mimeTypes?>" type="file" name="files[]" <?=($this->context->multiple)?'multiple':''?>>
+                <input id="<?=$this->context->htmlOptions['id']?>" data-fieldName="<?= $classArray['classname']?>[<?= $this->context->attribute?>][]" data-url="<?= $this->context->url ?>" accept="<?= $this->context->mimeTypes?>" type="file" name="files[]" <?=($this->context->multiple)?'multiple':''?>>
             </div>
         </div>
     </div>
